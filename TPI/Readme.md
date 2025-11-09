@@ -2,18 +2,20 @@
 
 ## Descripción del Programa
 
-Sistema completo de gestión de información sobre países desarrollado en Python puro (sin uso de librerías externas como `csv` o `pandas`). Este programa permite administrar, consultar y analizar datos geográficos y demográficos de países de todo el mundo.
+Sistema completo de gestión de información sobre países desarrollado en Python utilizando las librerías estándar `csv` y `os` (sin `pandas` ni otras librerías externas). Este programa permite administrar, consultar y analizar datos geográficos y demográficos de países de todo el mundo.
 
 ### Características Principales
 
 - **Carga Automática**: Los datos se cargan automáticamente desde `paises.csv` al iniciar el programa
-- **Gestión de Datos**: Agregar y actualizar países
+- **Gestión de Datos**: Agregar y actualizar países sin usar variables globales
+- **Persistencia Automática**: Los cambios se guardan automáticamente en el archivo CSV
 - **Búsquedas Avanzadas**: Búsqueda por nombre con coincidencia parcial o exacta
 - **Filtros Múltiples**: Por continente, rango de población y rango de superficie
 - **Ordenamiento Flexible**: Por nombre, población o superficie (ascendente/descendente)
 - **Estadísticas Detalladas**: Promedios, extremos y distribución por continentes
-- **Validaciones Robustas**: Control de errores y validación de entradas
-- **Interfaz Profesional**: Menú interactivo con visualización en formato tabla
+- **Validaciones Robustas**: Validación preventiva de entradas sin uso de try/except
+- **Interfaz Profesional**: Menú interactivo con visualización en formato tabla y limpieza automática de pantalla
+- **Arquitectura Modular**: Código sin variables globales, todas las funciones reciben parámetros
 
 ### Estructura de Datos
 
@@ -30,7 +32,7 @@ Cada país contiene la siguiente información:
 ### Requisitos
 
 - Python 3.10 o superior (utiliza `match-case`)
-- No requiere instalación de librerías adicionales
+- No requiere instalación de librerías adicionales (solo usa librerías estándar de Python)
 
 ### Ejecución del Programa
 
@@ -243,13 +245,16 @@ Japón,125000000,377975,Asia
 
 ### Validaciones Implementadas
 
-El programa valida:
+El programa valida (sin usar try/except):
+- Existencia de archivos (os.path.exists)
+- Permisos de lectura (os.access)
+- Archivos válidos no vacíos (os.path.getsize)
 - Cantidad correcta de campos (4)
 - Campos no vacíos
-- Valores numéricos válidos
+- Valores numéricos válidos (función es_numero personalizada)
 - Números positivos
 - Formato correcto de datos
-- Manejo de errores con reporte detallado
+- Validación preventiva de errores antes de operaciones críticas
 
 ---
 
@@ -283,14 +288,17 @@ El programa valida:
 ### Estructuras de Datos Utilizadas
 - **Listas**: Para almacenar colecciones de países
 - **Diccionarios**: Para representar cada país con sus atributos
-- **Sets**: Para obtener continentes únicos
+- **Módulos estándar**: `csv` para lectura/escritura de archivos, `os` para validación de archivos y limpieza de pantalla
+- **Sin variables globales**: Arquitectura basada en paso de parámetros
 
 ### Técnicas de Programación
 - **Funciones modulares**: Una función = una responsabilidad
-- **Validación robusta**: Control exhaustivo de entradas
+- **Programación sin estado global**: Todas las funciones reciben datos por parámetros
+- **Validación robusta**: Control exhaustivo de entradas sin try/except
 - **Algoritmo de ordenamiento**: Método Burbuja - Bubble Sort (O(n²))
 - **Búsqueda eficiente**: Comparación normalizada de cadenas
-- **Manejo de archivos**: Lectura manual sin librerías CSV
+- **Manejo de archivos**: Uso de csv.DictReader/DictWriter con bloque with
+- **Interfaz de usuario mejorada**: Limpieza automática de pantalla con os.system()
 
 ### Conceptos Aplicados
 - Estructuras condicionales (`if`, `elif`, `else`, `match-case`)
@@ -300,6 +308,11 @@ El programa valida:
 - Operaciones con listas y diccionarios
 - Lectura y procesamiento de archivos
 - Formateo avanzado de salida
+- Uso del módulo csv (csv.DictReader, csv.DictWriter)
+- Validación preventiva con módulo os (sin try/except)
+- Limpieza de pantalla multiplataforma con os.system()
+- Persistencia automática de datos
+- Arquitectura sin variables globales (programación funcional)
 
 ---
 
@@ -356,11 +369,14 @@ El archivo `paises.csv` incluido contiene datos de ejemplo de países de diferen
 
 ## Notas Adicionales
 
-- **Sin dependencias externas**: No utiliza `import csv` ni `pandas`
-- **Python puro**: Implementación desde cero de todas las funcionalidades
-- **Código limpio**: Comentado y siguiendo buenas prácticas
-- **Interfaz amigable**: Mensajes claros y diseño visual atractivo
+- **Sin dependencias externas**: Utiliza solo librerías estándar de Python (`csv` y `os`), no requiere `pandas` ni instalaciones adicionales
+- **Python con librerías estándar**: Implementación usando módulos csv y os de la biblioteca estándar
+- **Sin try/except**: Restricción académica cumplida mediante validación preventiva
+- **Sin variables globales**: Arquitectura modular con paso de parámetros entre funciones
+- **Código limpio**: Comentado y siguiendo buenas prácticas de programación
+- **Interfaz amigable**: Mensajes claros, diseño visual atractivo y limpieza automática de pantalla
 - **Escalable**: Fácil de extender con nuevas funcionalidades
+- **Multiplataforma**: Compatible con Windows, Linux y macOS
 
 ---
 
