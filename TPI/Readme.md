@@ -33,11 +33,19 @@ Cada país contiene la siguiente información:
 
 ### Ejecución del Programa
 
-1. Abrir terminal en el directorio del proyecto
+**IMPORTANTE**: El programa debe ejecutarse desde la misma carpeta donde se encuentra el archivo `Aguero_Frison.py` para que la lectura de archivos CSV funcione correctamente.
+
+1. Abrir terminal en el directorio TPI del proyecto
 2. Ejecutar el comando:
    ```bash
    python Aguero_Frison.py
    ```
+
+**Ejemplo de ejecución correcta:**
+```bash
+cd TPI
+python Aguero_Frison.py
+```
 
 ### Navegación del Menú
 
@@ -279,18 +287,63 @@ El programa valida:
 ### Técnicas de Programación
 - **Funciones modulares**: Una función = una responsabilidad
 - **Validación robusta**: Control exhaustivo de entradas
-- **Algoritmo de ordenamiento**: Método de selección (O(n²))
+- **Algoritmo de ordenamiento**: Método Burbuja - Bubble Sort (O(n²))
 - **Búsqueda eficiente**: Comparación normalizada de cadenas
 - **Manejo de archivos**: Lectura manual sin librerías CSV
 
 ### Conceptos Aplicados
-- Estructuras condicionales (`if`, `match-case`)
+- Estructuras condicionales (`if`, `elif`, `else`, `match-case`)
 - Estructuras repetitivas (`for`, `while`)
 - Funciones con parámetros y retorno de valores
 - Manipulación de cadenas de texto
 - Operaciones con listas y diccionarios
 - Lectura y procesamiento de archivos
 - Formateo avanzado de salida
+
+---
+
+## Algoritmo de Ordenamiento: Bubble Sort
+
+### Descripción
+El programa utiliza el **algoritmo de ordenamiento burbuja (Bubble Sort)** para ordenar los países según diferentes criterios (nombre, población, superficie).
+
+### Características del Bubble Sort
+- **Complejidad temporal**: O(n²) en el peor y promedio caso
+- **Complejidad espacial**: O(1) - ordenamiento in-place
+- **Estabilidad**: Algoritmo estable (mantiene el orden relativo de elementos iguales)
+- **Método**: Comparación e intercambio de elementos adyacentes
+
+### Funcionamiento
+El algoritmo compara elementos adyacentes y los intercambia si están en el orden incorrecto. Este proceso se repite hasta que toda la lista está ordenada. En cada pasada, el elemento más grande/pequeño "burbujea" hacia su posición final.
+
+### Ejemplo Visual
+```
+Lista inicial: [5, 2, 8, 1]
+
+Pasada 1:
+  [5, 2, 8, 1] → compara 5 y 2 → [2, 5, 8, 1]
+  [2, 5, 8, 1] → compara 5 y 8 → [2, 5, 8, 1]
+  [2, 5, 8, 1] → compara 8 y 1 → [2, 5, 1, 8] (8 en posición final)
+
+Pasada 2:
+  [2, 5, 1, 8] → compara 2 y 5 → [2, 5, 1, 8]
+  [2, 5, 1, 8] → compara 5 y 1 → [2, 1, 5, 8] (5 en posición final)
+
+Pasada 3:
+  [2, 1, 5, 8] → compara 2 y 1 → [1, 2, 5, 8] ✓ Lista ordenada
+```
+
+### Ventajas
+- ✅ Simple de entender e implementar
+- ✅ Excelente para propósitos educativos
+- ✅ No requiere memoria adicional
+- ✅ Es estable (mantiene orden relativo)
+
+### Por qué Bubble Sort para este proyecto
+- Ideal para **Programación 1** por su simplicidad conceptual
+- Fácil de seguir y depurar
+- Perfectamente adecuado para conjuntos de datos pequeños y medianos
+- Demuestra claramente el concepto de algoritmos de ordenamiento
 
 ---
 

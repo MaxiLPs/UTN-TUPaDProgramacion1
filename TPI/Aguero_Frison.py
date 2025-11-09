@@ -21,7 +21,7 @@
 # - Funciones: para organizar el código en bloques reutilizables
 # - Estructuras condicionales (if/elif/else, match/case)
 # - Estructuras repetitivas (for, while)
-# - Ordenamiento por selección
+# - Ordenamiento burbuja (Bubble Sort)
 # - Lectura de archivos CSV sin usar librerías externas
 #
 # ========================================================================
@@ -65,7 +65,7 @@ def leer_csv(nombre_archivo):
     errores_encontrados = []
     
     # Abrir y leer el archivo
-    archivo = open(nombre_archivo, 'r')
+    archivo = open(nombre_archivo, 'r' , encoding='utf-8')
     lineas = archivo.readlines()
     archivo.close()
     
@@ -674,7 +674,7 @@ def filtrar_por_superficie():
 
 def ordenar_paises_por_criterio(lista_paises, criterio, ascendente):
     """
-    Ordena una lista de países por un criterio específico usando el algoritmo de selección.
+    Ordena una lista de países por un criterio específico usando el algoritmo de burbuja.
     
     Parámetros:
         lista_paises: lista de diccionarios de países a ordenar
@@ -694,25 +694,28 @@ def ordenar_paises_por_criterio(lista_paises, criterio, ascendente):
     
     n = len(paises_ordenados)
     
-    # Aplicar ordenamiento por selección
-    for i in range(n):
-        indice_seleccionado = i
-        
-        for j in range(i + 1, n):
+    # Aplicar ordenamiento burbuja (Bubble Sort)
+    # El algoritmo compara elementos adyacentes y los intercambia si están en orden incorrecto
+    for i in range(n - 1):
+        # En cada pasada, el elemento más grande/pequeño "burbujea" hacia el final
+        for j in range(n - 1 - i):
+            # Determinar si se debe hacer el intercambio según el orden deseado
+            debe_intercambiar = False
+            
             if ascendente:
-                # Para orden ascendente: buscar el menor elemento
-                if paises_ordenados[j][criterio] < paises_ordenados[indice_seleccionado][criterio]:
-                    indice_seleccionado = j
+                # Para orden ascendente: intercambiar si el actual es mayor que el siguiente
+                if paises_ordenados[j][criterio] > paises_ordenados[j + 1][criterio]:
+                    debe_intercambiar = True
             else:
-                # Para orden descendente: buscar el mayor elemento
-                if paises_ordenados[j][criterio] > paises_ordenados[indice_seleccionado][criterio]:
-                    indice_seleccionado = j
-        
-        # Intercambiar el elemento seleccionado con la posición actual
-        if indice_seleccionado != i:
-            temp = paises_ordenados[i]
-            paises_ordenados[i] = paises_ordenados[indice_seleccionado]
-            paises_ordenados[indice_seleccionado] = temp
+                # Para orden descendente: intercambiar si el actual es menor que el siguiente
+                if paises_ordenados[j][criterio] < paises_ordenados[j + 1][criterio]:
+                    debe_intercambiar = True
+            
+            # Realizar el intercambio si es necesario
+            if debe_intercambiar:
+                temp = paises_ordenados[j]
+                paises_ordenados[j] = paises_ordenados[j + 1]
+                paises_ordenados[j + 1] = temp
     
     return paises_ordenados
 
@@ -1054,13 +1057,17 @@ def mostrar_menu():
 def opcion_cargar_csv():
     """
     Función auxiliar para la opción 1: Cargar países desde archivo CSV.
+    Por defecto usa 'paises.csv' si el usuario presiona Enter sin ingresar nada.
     """
+    global paises
+    
     print("\n>> Cargando paises desde archivo CSV...")
-    nombre_archivo = ""
-    while not nombre_archivo:
-        nombre_archivo = input("Ingrese el nombre del archivo CSV: ").strip()
-        if not nombre_archivo:
-            print("Error: Debe ingresar un nombre de archivo.")
+    nombre_archivo = input("Ingrese el nombre del archivo CSV (Enter para 'paises.csv'): ").strip()
+    
+    # Si el usuario no ingresa nada, usar archivo por defecto
+    if nombre_archivo == "":
+        nombre_archivo = "paises.csv"
+        print(f"Usando archivo por defecto: {nombre_archivo}")
     
     leer_csv(nombre_archivo)
 
