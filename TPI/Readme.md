@@ -6,7 +6,8 @@ Sistema completo de gestión de información sobre países desarrollado en Pytho
 
 ### Características Principales
 
-- **Gestión de Datos**: Carga desde archivos CSV, agregar y actualizar países
+- **Carga Automática**: Los datos se cargan automáticamente desde `paises.csv` al iniciar el programa
+- **Gestión de Datos**: Agregar y actualizar países
 - **Búsquedas Avanzadas**: Búsqueda por nombre con coincidencia parcial o exacta
 - **Filtros Múltiples**: Por continente, rango de población y rango de superficie
 - **Ordenamiento Flexible**: Por nombre, población o superficie (ascendente/descendente)
@@ -47,29 +48,31 @@ cd TPI
 python Aguero_Frison.py
 ```
 
+**Carga Inicial de Datos:**
+Al iniciar el programa, se cargará automáticamente el archivo `paises.csv` que contiene los datos iniciales de los países. Este proceso es automático y no requiere intervención del usuario.
+
 ### Navegación del Menú
 
-Al iniciar el programa, se presenta un menú interactivo con las siguientes opciones:
+Al iniciar el programa, se cargan automáticamente los datos desde `paises.csv` y luego se presenta un menú interactivo con las siguientes opciones:
 
-#### Gestión de Datos (Opciones 1-3)
-- **[1] Cargar países desde archivo CSV**: Importa datos desde un archivo CSV
-- **[2] Agregar país manualmente**: Añade un nuevo país ingresando todos sus datos
-- **[3] Actualizar datos de país**: Modifica población y superficie de un país existente
+#### Gestión de Datos (Opciones 1-2)
+- **[1] Agregar país manualmente**: Añade un nuevo país ingresando todos sus datos
+- **[2] Actualizar datos de país**: Modifica población y superficie de un país existente
 
-#### Consultas y Búsquedas (Opciones 4-7)
-- **[4] Buscar país por nombre**: Búsqueda con coincidencia parcial o exacta
-- **[5] Filtrar por continente**: Muestra todos los países de un continente
-- **[6] Filtrar por rango de población**: Filtra por población mínima y máxima
-- **[7] Filtrar por rango de superficie**: Filtra por superficie mínima y máxima
+#### Consultas y Búsquedas (Opciones 3-6)
+- **[3] Buscar país por nombre**: Búsqueda con coincidencia parcial o exacta
+- **[4] Filtrar por continente**: Muestra todos los países de un continente
+- **[5] Filtrar por rango de población**: Filtra por población mínima y máxima
+- **[6] Filtrar por rango de superficie**: Filtra por superficie mínima y máxima
 
-#### Ordenamiento (Opciones 8-10)
-- **[8] Ordenar por nombre**: Orden alfabético (A-Z)
-- **[9] Ordenar por población**: Orden ascendente o descendente
-- **[10] Ordenar por superficie**: Orden ascendente o descendente
+#### Ordenamiento (Opciones 7-9)
+- **[7] Ordenar por nombre**: Orden alfabético (A-Z)
+- **[8] Ordenar por población**: Orden ascendente o descendente
+- **[9] Ordenar por superficie**: Orden ascendente o descendente
 
-#### Análisis y Estadísticas (Opciones 11-12)
-- **[11] Mostrar estadísticas generales**: Indicadores clave y distribución
-- **[12] Mostrar todos los países**: Lista completa con opciones de ordenamiento
+#### Análisis y Estadísticas (Opciones 10-11)
+- **[10] Mostrar estadísticas generales**: Indicadores clave y distribución
+- **[11] Mostrar todos los países**: Lista completa con opciones de ordenamiento
 
 #### Salida
 - **[0] Salir del programa**: Finaliza la ejecución
@@ -78,28 +81,26 @@ Al iniciar el programa, se presenta un menú interactivo con las siguientes opci
 
 ## Ejemplos de Entradas y Salidas
 
-### Ejemplo 1: Cargar Archivo CSV
+### Ejemplo 1: Inicio del Programa
 
-**Entrada:**
+**Al ejecutar el programa:**
 ```
->> Seleccione una opcion: 1
-Ingrese el nombre del archivo CSV: paises_ejemplo.csv
-```
+>> Cargando datos iniciales desde archivo CSV...
 
-**Salida:**
-```
 ============================================================
            RESULTADO DE CARGA DE ARCHIVO
 ============================================================
-✓ Países cargados exitosamente: 5
+Paises cargados exitosamente: 25
 ============================================================
+
+>> Presione Enter para continuar...
 ```
 
 ### Ejemplo 2: Agregar País Manualmente
 
 **Entrada:**
 ```
->> Seleccione una opcion: 2
+>> Seleccione una opcion: 1
 Ingrese el nombre del país: Uruguay
 Ingrese la población: 3500000
 Ingrese la superficie (km²): 176215
@@ -118,7 +119,7 @@ Ingrese el continente: América Del Sur
 
 **Entrada:**
 ```
->> Seleccione una opcion: 4
+>> Seleccione una opcion: 3
 Ingrese el nombre del pais a buscar: arg
 ```
 
@@ -141,7 +142,7 @@ Total de países mostrados: 1
 
 **Entrada:**
 ```
->> Seleccione una opcion: 5
+>> Seleccione una opcion: 4
 Continentes disponibles:
   1. América Del Sur (2 países)
   2. Europa (2 países)
@@ -168,7 +169,7 @@ Total de países mostrados: 2
 
 **Entrada:**
 ```
->> Seleccione una opcion: 11
+>> Seleccione una opcion: 10
 ```
 
 **Salida:**

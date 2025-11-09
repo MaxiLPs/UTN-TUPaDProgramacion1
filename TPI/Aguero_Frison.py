@@ -1021,30 +1021,29 @@ def mostrar_menu():
     print("║" + " "*70 + "║")
     print("║" + "  >> GESTION DE DATOS".ljust(70) + "║")
     print("║" + "     ┌─────────────────────────────────────────────────────────┐".ljust(70) + "║")
-    print("║" + "     │  [ 1]  Cargar paises desde archivo CSV                  │".ljust(70) + "║")
-    print("║" + "     │  [ 2]  Agregar pais manualmente                         │".ljust(70) + "║")
-    print("║" + "     │  [ 3]  Actualizar datos de pais existente               │".ljust(70) + "║")
+    print("║" + "     │  [ 1]  Agregar pais manualmente                         │".ljust(70) + "║")
+    print("║" + "     │  [ 2]  Actualizar datos de pais existente               │".ljust(70) + "║")
     print("║" + "     └─────────────────────────────────────────────────────────┘".ljust(70) + "║")
     print("║" + " "*70 + "║")
     print("║" + "  >> CONSULTAS Y BUSQUEDAS".ljust(70) + "║")
     print("║" + "     ┌─────────────────────────────────────────────────────────┐".ljust(70) + "║")
-    print("║" + "     │  [ 4]  Buscar pais por nombre                           │".ljust(70) + "║")
-    print("║" + "     │  [ 5]  Filtrar por continente                           │".ljust(70) + "║")
-    print("║" + "     │  [ 6]  Filtrar por rango de poblacion                   │".ljust(70) + "║")
-    print("║" + "     │  [ 7]  Filtrar por rango de superficie                  │".ljust(70) + "║")
+    print("║" + "     │  [ 3]  Buscar pais por nombre                           │".ljust(70) + "║")
+    print("║" + "     │  [ 4]  Filtrar por continente                           │".ljust(70) + "║")
+    print("║" + "     │  [ 5]  Filtrar por rango de poblacion                   │".ljust(70) + "║")
+    print("║" + "     │  [ 6]  Filtrar por rango de superficie                  │".ljust(70) + "║")
     print("║" + "     └─────────────────────────────────────────────────────────┘".ljust(70) + "║")
     print("║" + " "*70 + "║")
     print("║" + "  >> ORDENAMIENTO".ljust(70) + "║")
     print("║" + "     ┌─────────────────────────────────────────────────────────┐".ljust(70) + "║")
-    print("║" + "     │  [ 8]  Ordenar por nombre                               │".ljust(70) + "║")
-    print("║" + "     │  [ 9]  Ordenar por poblacion                            │".ljust(70) + "║")
-    print("║" + "     │  [10]  Ordenar por superficie                           │".ljust(70) + "║")
+    print("║" + "     │  [ 7]  Ordenar por nombre                               │".ljust(70) + "║")
+    print("║" + "     │  [ 8]  Ordenar por poblacion                            │".ljust(70) + "║")
+    print("║" + "     │  [ 9]  Ordenar por superficie                           │".ljust(70) + "║")
     print("║" + "     └─────────────────────────────────────────────────────────┘".ljust(70) + "║")
     print("║" + " "*70 + "║")
     print("║" + "  >> ANALISIS Y ESTADISTICAS".ljust(70) + "║")
     print("║" + "     ┌─────────────────────────────────────────────────────────┐".ljust(70) + "║")
-    print("║" + "     │  [11]  Mostrar estadisticas generales                   │".ljust(70) + "║")
-    print("║" + "     │  [12]  Mostrar todos los paises                         │".ljust(70) + "║")
+    print("║" + "     │  [10]  Mostrar estadisticas generales                   │".ljust(70) + "║")
+    print("║" + "     │  [11]  Mostrar todos los paises                         │".ljust(70) + "║")
     print("║" + "     └─────────────────────────────────────────────────────────┘".ljust(70) + "║")
     print("║" + " "*70 + "║")
     print("║" + "  >> SALIDA".ljust(70) + "║")
@@ -1079,33 +1078,31 @@ def ejecutar_opcion_menu(opcion):
     """
     match opcion:
         case '1':
-            opcion_cargar_csv()
-        case '2':
             agregar_pais()
-        case '3':
+        case '2':
             actualizar_pais()
-        case '4':
+        case '3':
             buscar_pais()
-        case '5':
+        case '4':
             filtrar_por_continente()
-        case '6':
+        case '5':
             filtrar_por_poblacion()
-        case '7':
+        case '6':
             filtrar_por_superficie()
-        case '8':
+        case '7':
             ordenar_por_nombre()
-        case '9':
+        case '8':
             ordenar_por_poblacion()
-        case '10':
+        case '9':
             ordenar_por_superficie()
-        case '11':
+        case '10':
             mostrar_estadisticas()
-        case '12':
+        case '11':
             mostrar_todos_los_paises()
         case '0':
             return False
         case _:
-            print("\nError: Opcion invalida. Por favor, seleccione una opcion del 0 al 12.")
+            print("\nError: Opcion invalida. Por favor, seleccione una opcion del 0 al 11.")
     
     return True
 
@@ -1171,8 +1168,13 @@ def main():
     Función principal que ejecuta el programa.
     Controla el flujo general: bienvenida -> menú -> operaciones -> despedida
     """
-    # PASO 1: Mostrar mensaje de bienvenida al usuario
+    # Mostrar mensaje de bienvenida al usuario
     mostrar_mensaje_bienvenida()
+    
+    # Cargar archivo CSV automáticamente al iniciar
+    print("\n>> Cargando datos iniciales desde archivo CSV...")
+    leer_csv("paises.csv")
+    input("\n>> Presione Enter para continuar...")
     
     # Ciclo principal del programa
     continuar = True
@@ -1180,7 +1182,7 @@ def main():
         mostrar_menu()
         
         # Solicitar opción
-        opcion = input("\n>> Seleccione una opcion [0-12]: ").strip()
+        opcion = input("\n>> Seleccione una opcion [0-11]: ").strip()
         
         # Ejecutar la opción elegida
         continuar = ejecutar_opcion_menu(opcion)
