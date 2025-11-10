@@ -67,32 +67,20 @@ def leer_csv(nombre_archivo):
     """
     Lee un archivo CSV y carga los datos de países.
     Utiliza el módulo csv de Python para un manejo robusto del formato CSV.
-    SIN try/except - Usa validación preventiva según restricciones académicas.
 
     Formato esperado del CSV:
         nombre,poblacion,superficie,continente
         Argentina,45000000,2780400,América del Sur
-    
+
     Retorna:
         list: Lista de diccionarios con los países cargados, o lista vacía si hay error
     """
-    paises_cargados_lista = []
-    paises_cargados = 0
-    errores_encontrados = []
+    paises_cargados = []
+    errores = 0
 
     # Verificar si el archivo existe
     if not os.path.exists(nombre_archivo):
         print(f"Error: El archivo '{nombre_archivo}' no existe.")
-        return []
-
-    # Verificar que sea un archivo válido (no un directorio)
-    if not os.path.isfile(nombre_archivo):
-        print(f"Error: '{nombre_archivo}' no es un archivo valido.")
-        return []
-
-    # Verificar permisos de lectura
-    if not os.access(nombre_archivo, os.R_OK):
-        print(f"Error: No se tienen permisos para leer '{nombre_archivo}'.")
         return []
 
     # Verificar que el archivo no esté vacío
@@ -100,50 +88,33 @@ def leer_csv(nombre_archivo):
         print("Error: El archivo esta vacio.")
         return []
 
-    # Abrir y leer el archivo usando csv.DictReader con bloque with
+    # Abrir y leer el archivo usando csv.DictReader
     with open(nombre_archivo, 'r', newline='', encoding='utf-8') as archivo:
         lector = csv.DictReader(archivo)
 
-        # Verificar que el archivo tenga los campos esperados
-        if lector.fieldnames is None:
-            print("Error: El archivo esta vacio.")
-            return []
-
         # Procesar cada fila del CSV
-        for i, fila in enumerate(lector, start=2):  # start=2 porque línea 1 es el header
-            # Validar que la fila no sea None
-            if fila is None:
-                error = f"Linea {i}: Fila vacia o corrupta"
-                errores_encontrados.append(error)
-                continue
-
+        for fila in lector:
             # Validar que todos los campos obligatorios estén presentes
             nombre = fila.get('nombre', '').strip()
             poblacion_str = fila.get('poblacion', '').strip()
             superficie_str = fila.get('superficie', '').strip()
             continente = fila.get('continente', '').strip()
 
-            # Validar que no haya campos vacíos
+            # Validar que no haya campos vacíos y que sean números válidos
             if not nombre or not poblacion_str or not superficie_str or not continente:
-                error = f"Linea {i}: Campos vacios no permitidos"
-                errores_encontrados.append(error)
+                errores = errores + 1
                 continue
 
-            # Validar y convertir población y superficie a enteros
-            # USAR es_numero() para validar ANTES de convertir (sin try/except)
-            if not es_numero(poblacion_str) or not es_numero(superficie_str):
-                error = f"Linea {i}: Poblacion y superficie deben ser numeros enteros"
-                errores_encontrados.append(error)
+            if not poblacion_str.isdigit() or not superficie_str.isdigit():
+                errores = errores + 1
                 continue
 
-            # Ahora es seguro convertir (no lanzará ValueError porque ya validamos)
             poblacion = int(poblacion_str)
             superficie = int(superficie_str)
 
-            # Regla de negocio: no existen países con población o superficie cero o negativa
+            # Validar que sean valores positivos
             if poblacion <= 0 or superficie <= 0:
-                error = f"Linea {i}: Poblacion y superficie deben ser numeros positivos"
-                errores_encontrados.append(error)
+                errores = errores + 1
                 continue
 
             # Crear diccionario del país y agregarlo a la lista
@@ -154,50 +125,58 @@ def leer_csv(nombre_archivo):
                 'continente': continente.title()
             }
 
-            paises_cargados_lista.append(pais)
-            paises_cargados = paises_cargados + 1
+            paises_cargados.append(pais)
 
     # Mostrar resumen del resultado
     print("\n" + "="*60)
     print("           RESULTADO DE CARGA DE ARCHIVO")
     print("="*60)
+    print(f"Paises cargados exitosamente: {len(paises_cargados)}")
 
-    if paises_cargados > 0:
-        print(f"Paises cargados exitosamente: {paises_cargados}")
+    if errores > 0:
+        print(f"Lineas con errores omitidas: {errores}")
 
-    if len(errores_encontrados) > 0:
-        print(f"Errores encontrados: {len(errores_encontrados)}")
-        print("\nDetalle de errores:")
-
-        limite = 5 if len(errores_encontrados) >= 5 else len(errores_encontrados)
-
-        for j in range(limite):
-            print(f"  {errores_encontrados[j]}")
-
-        if len(errores_encontrados) > 5:
-            print(f"  ... y {len(errores_encontrados) - 5} errores mas")
-
-    if paises_cargados == 0:
+    if len(paises_cargados) == 0:
         print("No se pudo cargar ningun pais del archivo.")
 
     print("="*60)
 
-    return paises_cargados_lista
+    return paises_cargados
 
 # ========================== FUNCIONES AUXILIARES ==========================
 
-def es_numero(texto):
+def solicitar_numero_positivo(mensaje):
     """
-    Verifica si un texto contiene solo dígitos.
+    Solicita al usuario un número entero positivo.
+    Valida que sea un número entero válido (sin decimales) y mayor a cero.
+
+    Parámetros:
+        mensaje (str): Mensaje a mostrar al usuario
+
+    Retorna:
+        int: Número entero positivo ingresado por el usuario
     """
-    if texto == "":
-        return False
-    
-    for caracter in texto:
-        if caracter < '0' or caracter > '9':
-            return False
-    
-    return True
+    while True:
+        valor = input(mensaje).strip()
+
+        # Validar que no tenga punto decimal
+        if '.' in valor:
+            print("Error: Debe ingresar un numero entero (sin decimales).")
+            continue
+
+        # Validar que sea un número
+        if not valor.isdigit():
+            print("Error: Debe ingresar un numero entero valido.")
+            continue
+
+        numero = int(valor)
+
+        # Validar que sea positivo
+        if numero <= 0:
+            print("Error: El numero debe ser mayor a 0.")
+            continue
+
+        return numero
 
 def buscar_pais_por_nombre_exacto(paises, nombre_buscar):
     """
@@ -300,36 +279,10 @@ def agregar_pais(paises):
         break
     
     # Solicitar y validar población (número entero positivo)
-    while True:
-        poblacion_str = input("Ingrese la poblacion: ").strip()
-        
-        if not es_numero(poblacion_str):
-            print("Error: La poblacion debe ser un numero entero valido.")
-            continue
-        
-        poblacion = int(poblacion_str)
-        
-        if poblacion <= 0:
-            print("Error: La poblacion debe ser mayor a 0.")
-            continue
-        
-        break
-    
+    poblacion = solicitar_numero_positivo("Ingrese la poblacion: ")
+
     # Solicitar y validar superficie (número entero positivo)
-    while True:
-        superficie_str = input("Ingrese la superficie (km2): ").strip()
-        
-        if not es_numero(superficie_str):
-            print("Error: La superficie debe ser un numero entero valido.")
-            continue
-        
-        superficie = int(superficie_str)
-        
-        if superficie <= 0:
-            print("Error: La superficie debe ser mayor a 0.")
-            continue
-        
-        break
+    superficie = solicitar_numero_positivo("Ingrese la superficie (km2): ")
     
     # Mostrar continentes existentes como ayuda
     continentes_existentes = obtener_continentes_unicos(paises)
@@ -407,32 +360,38 @@ def actualizar_pais(paises):
     # Actualizar población si se ingresa un valor
     print("\nActualizacion de poblacion:")
     nueva_poblacion_str = input("Nueva poblacion (Enter para mantener actual): ").strip()
-    
+
     if nueva_poblacion_str != "":
-        if es_numero(nueva_poblacion_str):
+        # Validar que no tenga punto decimal
+        if '.' in nueva_poblacion_str:
+            print("Error: Debe ingresar un numero entero (sin decimales). No se actualizo.")
+        elif not nueva_poblacion_str.isdigit():
+            print("Error: Debe ingresar un numero entero valido. No se actualizo.")
+        else:
             nueva_poblacion = int(nueva_poblacion_str)
             if nueva_poblacion > 0:
                 pais_encontrado['poblacion'] = nueva_poblacion
                 print(f"Poblacion actualizada a {nueva_poblacion:,} habitantes.")
             else:
                 print("Error: La poblacion debe ser mayor a 0. No se actualizo.")
-        else:
-            print("Error: Debe ingresar un numero. No se actualizo.")
-    
+
     # Actualizar superficie si se ingresa un valor
     print("\nActualizacion de superficie:")
     nueva_superficie_str = input("Nueva superficie en km2 (Enter para mantener actual): ").strip()
 
     if nueva_superficie_str != "":
-        if es_numero(nueva_superficie_str):
+        # Validar que no tenga punto decimal
+        if '.' in nueva_superficie_str:
+            print("Error: Debe ingresar un numero entero (sin decimales). No se actualizo.")
+        elif not nueva_superficie_str.isdigit():
+            print("Error: Debe ingresar un numero entero valido. No se actualizo.")
+        else:
             nueva_superficie = int(nueva_superficie_str)
             if nueva_superficie > 0:
                 pais_encontrado['superficie'] = nueva_superficie
                 print(f"Superficie actualizada a {nueva_superficie:,} km2.")
             else:
                 print("Error: La superficie debe ser mayor a 0. No se actualizo.")
-        else:
-            print("Error: Debe ingresar un numero. No se actualizo.")
 
     # Guardar cambios en el archivo CSV
     guardar_paises(paises)
@@ -599,38 +558,10 @@ def filtrar_por_poblacion(paises):
     print(f"Rango de poblaciones en el sistema:")
     print(f"  Minima: {poblacion_min:,} habitantes")
     print(f"  Maxima: {poblacion_max:,} habitantes")
-    
-    # Solicitar población mínima del rango
-    while True:
-        min_poblacion_str = input("\nPoblacion minima: ").strip()
-        
-        if not es_numero(min_poblacion_str):
-            print("Error: Debe ingresar un numero entero valido.")
-            continue
-        
-        min_poblacion = int(min_poblacion_str)
-        
-        if min_poblacion <= 0:
-            print("Error: La poblacion debe ser mayor a 0.")
-            continue
-        
-        break
-    
-    # Solicitar población máxima del rango
-    while True:
-        max_poblacion_str = input("Poblacion maxima: ").strip()
-        
-        if not es_numero(max_poblacion_str):
-            print("Error: Debe ingresar un numero entero valido.")
-            continue
-        
-        max_poblacion = int(max_poblacion_str)
-        
-        if max_poblacion <= 0:
-            print("Error: La poblacion debe ser mayor a 0.")
-            continue
-        
-        break
+
+    # Solicitar población mínima y máxima del rango
+    min_poblacion = solicitar_numero_positivo("\nPoblacion minima: ")
+    max_poblacion = solicitar_numero_positivo("Poblacion maxima: ")
     
     # Validar que el rango sea lógico
     if min_poblacion > max_poblacion:
@@ -681,38 +612,10 @@ def filtrar_por_superficie(paises):
     print(f"Rango de superficies en el sistema:")
     print(f"  Minima: {superficie_min:,} km2")
     print(f"  Maxima: {superficie_max:,} km2")
-    
-    # Solicitar superficie mínima del rango
-    while True:
-        min_superficie_str = input("\nSuperficie minima (km2): ").strip()
-        
-        if not es_numero(min_superficie_str):
-            print("Error: Debe ingresar un numero entero valido.")
-            continue
-        
-        min_superficie = int(min_superficie_str)
-        
-        if min_superficie <= 0:
-            print("Error: La superficie debe ser mayor a 0.")
-            continue
-        
-        break
-    
-    # Solicitar superficie máxima del rango
-    while True:
-        max_superficie_str = input("Superficie maxima (km2): ").strip()
-        
-        if not es_numero(max_superficie_str):
-            print("Error: Debe ingresar un numero entero valido.")
-            continue
-        
-        max_superficie = int(max_superficie_str)
-        
-        if max_superficie <= 0:
-            print("Error: La superficie debe ser mayor a 0.")
-            continue
-        
-        break
+
+    # Solicitar superficie mínima y máxima del rango
+    min_superficie = solicitar_numero_positivo("\nSuperficie minima (km2): ")
+    max_superficie = solicitar_numero_positivo("Superficie maxima (km2): ")
     
     # Validar que el rango sea lógico
     if min_superficie > max_superficie:
