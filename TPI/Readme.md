@@ -258,8 +258,8 @@ España,47000000,505990,Europa
 
 ## 🔗 Enlaces
 
-- **Repositorio GitHub:**
-- **Video demostración:**
+- **Repositorio GitHub: https://github.com/MaxiLPs/UTN-TUPaDProgramacion1/tree/main/TPI**
+- **Video demostración: https://www.youtube.com/watch?v=__E4huUdYqA**
 
 ---
 
